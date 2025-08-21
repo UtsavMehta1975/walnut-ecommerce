@@ -1,0 +1,35 @@
+import axios from "axios";
+import toast from "react-hot-toast";
+import { logoutOn401 } from "./authUtils";
+
+const instance = axios.create({
+  baseURL: "http://localhost:5000",
+});
+
+// Attach JWT to every request
+instance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("jwt");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Handle global errors
+instance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error.response?.status;
+
+    if (status === 401 || status === 403) {
+      toast.error("Session expired. Logging out...");
+      logoutOn401();
+    } else {
+      toast.error(error.response?.data?.error || "Request failed");
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default instance;

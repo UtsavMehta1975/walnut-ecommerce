@@ -1,0 +1,129 @@
+.terms-container {
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: white;
+}
+
+/* Header */
+.terms-header {
+  text-align: center;
+  margin-bottom: 60px;
+  padding: 40px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.terms-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 15px;
+  background: linear-gradient(135deg, #ffffff, #f0f9ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.terms-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+/* Content */
+.terms-content {
+  line-height: 1.8;
+}
+
+.terms-section {
+  margin-bottom: 40px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.terms-section:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.terms-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: white;
+  background: linear-gradient(135deg, #ffffff, #f0f9ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.terms-section p {
+  margin-bottom: 15px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+}
+
+.terms-section ul {
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+.terms-section li {
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+}
+
+.contact-info {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.contact-info p {
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.contact-info strong {
+  color: white;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .terms-container {
+    padding: 20px 15px;
+  }
+  
+  .terms-title {
+    font-size: 2.2rem;
+  }
+  
+  .terms-subtitle {
+    font-size: 1rem;
+  }
+  
+  .terms-section {
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .terms-section h2 {
+    font-size: 1.3rem;
+  }
+  
+  .terms-section p {
+    font-size: 0.95rem;
+  }
+  
+  .terms-section li {
+    font-size: 0.9rem;
+  }
+}
+

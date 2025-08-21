@@ -1,0 +1,6 @@
+/* Additional layout tweaks if needed */
+@media (max-width: 640px) {
+  .product-list-title {
+    font-size: 1.5rem;
+  }
+}
