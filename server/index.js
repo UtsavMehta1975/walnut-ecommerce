@@ -1,6 +1,14 @@
+// Load environment variables (dotenv will be ignored if no .env file exists)
 require('dotenv').config();
 const app = require('./app');
 const sequelize = require('./config/database');
+
+// Debug: Log environment variables (remove in production)
+console.log('🔍 Environment Variables Debug:');
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_NAME:', process.env.DB_NAME);
+console.log('NODE_ENV:', process.env.NODE_ENV);
 
 // 📊 Swagger UI
 const swaggerUi = require('swagger-ui-express');
