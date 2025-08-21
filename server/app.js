@@ -25,6 +25,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// 🏠 Root route for healthcheck
+app.get('/', (req, res) => {
+  res.json({ 
+    message: '🌰 Walnut E-commerce API is running!',
+    status: 'healthy',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // 📊 API Routes
 app.use('/auth', authRoutes);
 app.use('/products', productRoutes);
