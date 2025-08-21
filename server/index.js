@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
     timestamp: new Date().toISOString(),
     database: 'connecting',
     env: {
+      MYSQL_URL: process.env.MYSQL_URL ? 'SET' : 'not set',
       DB_HOST: process.env.DB_HOST || 'not set',
       DB_USER: process.env.DB_USER || 'not set', 
       DB_NAME: process.env.DB_NAME || 'not set',
@@ -69,17 +70,17 @@ const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`🌰 Walnut server running on port ${PORT}`);
   console.log('🔍 Environment Variables Debug:');
+  console.log('MYSQL_URL:', process.env.MYSQL_URL ? 'SET' : 'UNDEFINED');
   console.log('DB_HOST:', process.env.DB_HOST || 'UNDEFINED');
   console.log('DB_USER:', process.env.DB_USER || 'UNDEFINED');
   console.log('DB_NAME:', process.env.DB_NAME || 'UNDEFINED');
-  console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? 'SET' : 'UNDEFINED');
   console.log('NODE_ENV:', process.env.NODE_ENV || 'UNDEFINED');
   console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN || 'UNDEFINED');
   
   // Check if we have database credentials
-  if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_NAME) {
+  if (!process.env.MYSQL_URL && (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_NAME)) {
     console.log('⚠️  WARNING: Database environment variables are missing!');
-    console.log('   Please check your Railway Variables configuration.');
+    console.log('   Please set MYSQL_URL in Railway Variables.');
   }
 });
 
@@ -87,9 +88,14 @@ const server = app.listen(PORT, () => {
 async function connectDatabase() {
   try {
     console.log('🔗 Attempting database connection...');
-    console.log('   Host:', process.env.DB_HOST);
-    console.log('   User:', process.env.DB_USER);
-    console.log('   Database:', process.env.DB_NAME);
+    
+    if (process.env.MYSQL_URL) {
+      console.log('   Using MYSQL_URL connection');
+    } else {
+      console.log('   Host:', process.env.DB_HOST);
+      console.log('   User:', process.env.DB_USER);
+      console.log('   Database:', process.env.DB_NAME);
+    }
     
     await sequelize.authenticate();
     console.log('✅ Database connection established successfully.');
