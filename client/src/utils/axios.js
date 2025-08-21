@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { logoutOn401 } from "./authUtils";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://yamanote.proxy.rlwy.net",
 });
 
 // Attach JWT to every request
