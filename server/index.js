@@ -24,12 +24,13 @@ app.get('/', (req, res) => {
     message: '🌰 Walnut E-commerce API is running!',
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    database: sequelize.authenticate ? 'connecting' : 'error',
+    database: 'connecting',
     env: {
       DB_HOST: process.env.DB_HOST || 'not set',
       DB_USER: process.env.DB_USER || 'not set', 
       DB_NAME: process.env.DB_NAME || 'not set',
-      NODE_ENV: process.env.NODE_ENV || 'not set'
+      NODE_ENV: process.env.NODE_ENV || 'not set',
+      PORT: process.env.PORT || 'not set'
     }
   });
 });
@@ -67,16 +68,29 @@ OrderItem.belongsTo(Product, { foreignKey: 'productId' });
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`🌰 Walnut server running on port ${PORT}`);
-  console.log('🔍 Environment Variables:');
-  console.log('DB_HOST:', process.env.DB_HOST);
-  console.log('DB_USER:', process.env.DB_USER);
-  console.log('DB_NAME:', process.env.DB_NAME);
-  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('🔍 Environment Variables Debug:');
+  console.log('DB_HOST:', process.env.DB_HOST || 'UNDEFINED');
+  console.log('DB_USER:', process.env.DB_USER || 'UNDEFINED');
+  console.log('DB_NAME:', process.env.DB_NAME || 'UNDEFINED');
+  console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? 'SET' : 'UNDEFINED');
+  console.log('NODE_ENV:', process.env.NODE_ENV || 'UNDEFINED');
+  console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN || 'UNDEFINED');
+  
+  // Check if we have database credentials
+  if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_NAME) {
+    console.log('⚠️  WARNING: Database environment variables are missing!');
+    console.log('   Please check your Railway Variables configuration.');
+  }
 });
 
 // Connect to database in background (non-blocking)
 async function connectDatabase() {
   try {
+    console.log('🔗 Attempting database connection...');
+    console.log('   Host:', process.env.DB_HOST);
+    console.log('   User:', process.env.DB_USER);
+    console.log('   Database:', process.env.DB_NAME);
+    
     await sequelize.authenticate();
     console.log('✅ Database connection established successfully.');
     
@@ -86,6 +100,7 @@ async function connectDatabase() {
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
     console.log('🔄 App will continue running without database connection.');
+    console.log('   Please check your Railway environment variables.');
   }
 }
 
