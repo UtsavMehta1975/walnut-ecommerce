@@ -39,7 +39,7 @@ router.post('/signup', async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: 'user' // Force all signups to be regular users
+      role: 'customer' // Force all signups to be regular customers
     });
 
     console.log('✅ User created:', user.toJSON());
