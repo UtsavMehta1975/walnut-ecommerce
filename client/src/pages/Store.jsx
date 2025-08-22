@@ -6,6 +6,9 @@ import "../styles/store.css";
 const Store = () => {
   const navigate = useNavigate();
   const audioRef = useRef(null);
+  
+  // Debug logging
+  console.log("🏪 Store component loaded");
 
   // Testimonials data
   const testimonials = [

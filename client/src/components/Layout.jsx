@@ -7,7 +7,7 @@ import '../styles/layout.css';
 
 const Layout = ({ children }) => {
   const { user, logout } = useAuth();
-  const { cartItems } = useCart();
+  const { cart: cartItems = [] } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -43,7 +43,7 @@ const Layout = ({ children }) => {
               <div className="user-actions">
                 <Link to="/cart" className="cart-btn">
                   🛒 Cart
-                  {cartItems.length > 0 && (
+                  {cartItems?.length > 0 && (
                     <span className="cart-badge">{cartItems.length}</span>
                   )}
                 </Link>
@@ -187,7 +187,7 @@ const Layout = ({ children }) => {
                 className="mobile-nav-link"
                 onClick={closeMobileMenu}
               >
-                🛒 Cart ({cartItems.length})
+                🛒 Cart ({cartItems?.length || 0})
               </Link>
               
               <Link 
