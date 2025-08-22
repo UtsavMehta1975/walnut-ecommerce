@@ -124,29 +124,15 @@ const Store = () => {
     window.addEventListener('scroll', requestTick, { passive: true });
   }, []);
 
-  const initParallaxEffects = useCallback(() => {
-    const parallaxElements = document.querySelectorAll('.hero-watch-image, .featured-image img');
-    
-    const handleParallax = () => {
-      const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.5;
-      
-      parallaxElements.forEach(element => {
-        element.style.transform = `translateY(${rate}px) scale(1.02)`;
-      });
-    };
-
-    window.addEventListener('scroll', handleParallax, { passive: true });
-  }, []);
+  // Removed parallax effects to keep images static during scroll
 
   React.useEffect(() => {
     // Initialize sensory UX after content loads
     setTimeout(() => {
       addHoverEffects();
       initScrollPhysics();
-      initParallaxEffects();
     }, 100);
-  }, [addHoverEffects, initScrollPhysics, initParallaxEffects]);
+  }, [addHoverEffects, initScrollPhysics]);
 
   const renderStars = (rating) => {
     return Array.from({ length: 5 }, (_, i) => (
