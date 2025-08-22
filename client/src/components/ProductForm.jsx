@@ -6,13 +6,13 @@ const ProductForm = ({ initialData, onSave, onCancel }) => {
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState(0);
   const [categoryId, setCategoryId] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
   const [description, setDescription] = useState('');
   const [inStock, setInStock] = useState(true);
   const [categories, setCategories] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
+  const [uploadError, setUploadError] = useState('');
 
   // Load categories
   useEffect(() => {
@@ -34,7 +34,6 @@ const ProductForm = ({ initialData, onSave, onCancel }) => {
       setPrice(initialData.price?.toString() || '');
       setStock(initialData.stock || 0);
       setCategoryId(initialData.categoryId?.toString() || '');
-      setImageUrl(initialData.imageUrl || '');
       setDescription(initialData.description || '');
       setInStock(initialData.inStock !== false);
       setImagePreview(initialData.imageUrl || '');
@@ -44,7 +43,21 @@ const ProductForm = ({ initialData, onSave, onCancel }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setUploadError('Please select a valid image file (JPEG, PNG, WEBP)');
+        return;
+      }
+      
+      // Validate file size (2MB limit)
+      if (file.size > 2 * 1024 * 1024) {
+        setUploadError('Image size must be less than 2MB');
+        return;
+      }
+
       setImageFile(file);
+      setUploadError('');
+      
       const reader = new FileReader();
       reader.onload = (e) => setImagePreview(e.target.result);
       reader.readAsDataURL(file);
@@ -62,20 +75,24 @@ const ProductForm = ({ initialData, onSave, onCancel }) => {
       return res.data.imageUrl;
     } catch (err) {
       console.error('Image upload failed:', err);
-      throw new Error('Image upload failed');
+      throw new Error(err.response?.data?.error || 'Image upload failed');
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
+    setUploadError('');
 
     try {
-      let finalImageUrl = imageUrl;
+      let finalImageUrl = null;
       
       // Upload new image if selected
       if (imageFile) {
         finalImageUrl = await uploadImage(imageFile);
+      } else if (imagePreview && !imageFile) {
+        // Use existing image URL if no new file selected
+        finalImageUrl = imagePreview;
       }
 
       const productData = {
@@ -83,7 +100,7 @@ const ProductForm = ({ initialData, onSave, onCancel }) => {
         price: parseFloat(price),
         stock: parseInt(stock),
         categoryId: parseInt(categoryId),
-        imageUrl: finalImageUrl || null,
+        imageUrl: finalImageUrl,
         description: description || '',
         inStock: Boolean(inStock),
       };
@@ -91,9 +108,16 @@ const ProductForm = ({ initialData, onSave, onCancel }) => {
       await onSave(productData);
     } catch (err) {
       console.error('Failed to save product:', err);
+      setUploadError(err.message || 'Failed to save product');
     } finally {
       setUploading(false);
     }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview('');
+    setUploadError('');
   };
 
   return (
@@ -169,31 +193,48 @@ const ProductForm = ({ initialData, onSave, onCancel }) => {
           <div className="form-group">
             <label>Product Image</label>
             <div className="image-upload-section">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="image-input"
-                id="image-upload"
-              />
-              <label htmlFor="image-upload" className="image-upload-btn">
-                📸 Choose Image
-              </label>
+              <div className="image-upload-controls">
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleImageChange}
+                  className="image-input"
+                  id="image-upload"
+                />
+                <label htmlFor="image-upload" className="image-upload-btn">
+                  📸 Upload Image
+                </label>
+                
+                {imagePreview && (
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="remove-image-btn"
+                  >
+                    🗑️ Remove
+                  </button>
+                )}
+              </div>
+              
+              {uploadError && (
+                <div className="upload-error">
+                  ❌ {uploadError}
+                </div>
+              )}
               
               {imagePreview && (
                 <div className="image-preview">
                   <img src={imagePreview} alt="Preview" />
+                  <div className="image-info">
+                    {imageFile && (
+                      <p>📁 {imageFile.name} ({(imageFile.size / 1024 / 1024).toFixed(2)}MB)</p>
+                    )}
+                  </div>
                 </div>
               )}
               
-              <div className="image-url-section">
-                <p>Or enter image URL:</p>
-                <input
-                  type="url"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                />
+              <div className="upload-help">
+                <p>💡 Supported formats: JPEG, PNG, WEBP (max 2MB)</p>
               </div>
             </div>
           </div>
