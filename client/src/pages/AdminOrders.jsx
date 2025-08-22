@@ -98,7 +98,7 @@ function AdminOrders() {
                   ))}
                 </select>
                 <button
-                  className="admin-button"
+                  className="admin-btn update"
                   disabled={statusUpdates[order.id] === order.status}
                   onClick={() => updateStatus(order.id)}
                 >

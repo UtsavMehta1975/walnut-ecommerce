@@ -97,6 +97,92 @@
   background: var(--glass-accent);
 }
 
+/* CRUD Button Color Scheme */
+/* Create - Blue */
+.admin-btn.create,
+.admin-button[data-action="create"] {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.admin-btn.create:hover,
+.admin-button[data-action="create"]:hover {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* Read - Yellow (for view/view details buttons) */
+.admin-btn.read,
+.admin-btn.view,
+.admin-button[data-action="read"],
+.admin-button[data-action="view"] {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.admin-btn.read:hover,
+.admin-btn.view:hover,
+.admin-button[data-action="read"]:hover,
+.admin-button[data-action="view"]:hover {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+/* Update - Green */
+.admin-btn.edit,
+.admin-btn.update,
+.admin-button[data-action="edit"],
+.admin-button[data-action="update"] {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.admin-btn.edit:hover,
+.admin-btn.update:hover,
+.admin-button[data-action="edit"]:hover,
+.admin-button[data-action="update"]:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* Delete - Red */
+.admin-btn.delete,
+.admin-button[data-action="delete"] {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.admin-btn.delete:hover,
+.admin-button[data-action="delete"]:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* Cancel button - Neutral */
+.admin-btn.cancel,
+.admin-button[data-action="cancel"] {
+  background: var(--glass-secondary);
+  color: var(--eggshell-white);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-btn.cancel:hover,
+.admin-button[data-action="cancel"]:hover {
+  background: var(--glass-accent);
+}
+
 /* Action Buttons */
 .admin-actions {
   display: flex;
@@ -145,16 +231,6 @@
 .admin-btn.save:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-medium);
-}
-
-.admin-btn.cancel {
-  background: var(--glass-secondary);
-  color: var(--eggshell-white);
-  border: 1px solid var(--border-subtle);
-}
-
-.admin-btn.cancel:hover {
-  background: var(--glass-accent);
 }
 
 /* Pagination */
