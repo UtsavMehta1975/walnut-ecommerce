@@ -137,6 +137,27 @@ router.get('/category/:id', productController.getProductsByCategory);
 
 /**
  * @swagger
+ * /{id}:
+ *   get:
+ *     summary: Get product by ID
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Product ID
+ *     responses:
+ *       200:
+ *         description: Product details
+ *       404:
+ *         description: Product not found
+ */
+router.get('/:id', productController.getProductById);
+
+/**
+ * @swagger
  * /:
  *   post:
  *     summary: Create a new product (admin only)

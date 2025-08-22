@@ -134,6 +134,27 @@ exports.getProductsByCategory = async (req, res) => {
   }
 };
 
+exports.getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByPk(id, {
+      include: {
+        model: Category,
+        attributes: ['name', 'description'],
+      },
+    });
+    
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    
+    res.json(product);
+  } catch (err) {
+    console.error('Error fetching product:', err);
+    res.status(500).json({ error: 'Failed to fetch product' });
+  }
+};
+
 exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
