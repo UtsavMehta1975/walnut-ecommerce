@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
-import Layout from "./components/Layout";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -33,144 +32,142 @@ function App() {
   return (
     <ThemeProvider>
       <CartProvider>
-        <Layout>
-          <Routes>
-            {/* Redirect root based on role */}
-            <Route path="/" element={<Navigate to={getRedirectPath()} replace />} />
+        <Routes>
+          {/* Redirect root based on role */}
+          <Route path="/" element={<Navigate to={getRedirectPath()} replace />} />
 
-            {/* Access Denied route */}
-            <Route path="/access-denied" element={<AccessDenied />} />
+          {/* Access Denied route */}
+          <Route path="/access-denied" element={<AccessDenied />} />
 
-            {/* Public routes with role-aware redirect */}
-            <Route
-              path="/login"
-              element={user ? <Navigate to={getRedirectPath()} replace /> : <Login />}
-            />
-            <Route
-              path="/signup"
-              element={user ? <Navigate to={getRedirectPath()} replace /> : <Signup />}
-            />
+          {/* Public routes with role-aware redirect */}
+          <Route
+            path="/login"
+            element={user ? <Navigate to={getRedirectPath()} replace /> : <Login />}
+          />
+          <Route
+            path="/signup"
+            element={user ? <Navigate to={getRedirectPath()} replace /> : <Signup />}
+          />
 
-            {/* Protected routes */}
-            <Route
-              path="/store"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
+          {/* Protected routes */}
+          <Route
+            path="/store"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/cart"
-              element={
-                <ProtectedRoute>
-                  <Cart />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <Cart />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute allowedRoles={["admin"]}>
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/admin-products"
-              element={
-                <ProtectedRoute allowedRoles={["admin"]}>
-                  <AdminProducts />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/admin-products"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminProducts />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/admin-orders"
-              element={
-                <ProtectedRoute allowedRoles={["admin"]}>
-                  <AdminOrders />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/admin-orders"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminOrders />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/admin-categories"
-              element={
-                <ProtectedRoute allowedRoles={["admin"]}>
-                  <AdminCategories />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/admin-categories"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminCategories />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/order-confirmation"
-              element={
-                <ProtectedRoute>
-                  <OrderConfirmation />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/order-confirmation"
+            element={
+              <ProtectedRoute>
+                <OrderConfirmation />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/my-orders"
-              element={
-                <ProtectedRoute>
-                  <MyOrders />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/my-orders"
+            element={
+              <ProtectedRoute>
+                <MyOrders />
+              </ProtectedRoute>
+            }
+          />
 
-            {/* New pages */}
-            <Route
-              path="/about"
-              element={
-                <ProtectedRoute>
-                  <About />
-                </ProtectedRoute>
-              }
-            />
+          {/* New pages */}
+          <Route
+            path="/about"
+            element={
+              <ProtectedRoute>
+                <About />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/contact"
-              element={
-                <ProtectedRoute>
-                  <Contact />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/contact"
+            element={
+              <ProtectedRoute>
+                <Contact />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/projects"
-              element={
-                <ProtectedRoute>
-                  <Projects />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/projects"
+            element={
+              <ProtectedRoute>
+                <Projects />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/categories"
-              element={
-                <ProtectedRoute>
-                  <Categories />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/categories"
+            element={
+              <ProtectedRoute>
+                <Categories />
+              </ProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/terms"
-              element={
-                <ProtectedRoute>
-                  <Terms />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Layout>
+          <Route
+            path="/terms"
+            element={
+              <ProtectedRoute>
+                <Terms />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
       </CartProvider>
     </ThemeProvider>
   );

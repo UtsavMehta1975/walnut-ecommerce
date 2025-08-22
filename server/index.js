@@ -8,9 +8,24 @@ const sequelize = require('./config/database');
 // Create Express app
 const app = express();
 
-// Enable CORS
+// Enable CORS with multiple origins
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://walnut-ecommerce-frontend122.vercel.app',
+  'https://walnut-ecommerce-frontend1.vercel.app'
+];
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -99,13 +114,14 @@ const server = app.listen(PORT, () => {
   console.log('DB_HOST:', process.env.DB_HOST || 'UNDEFINED');
   console.log('DB_USER:', process.env.DB_USER || 'UNDEFINED');
   console.log('DB_NAME:', process.env.DB_NAME || 'UNDEFINED');
+  console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? 'SET' : 'UNDEFINED');
   console.log('NODE_ENV:', process.env.NODE_ENV || 'UNDEFINED');
   console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN || 'UNDEFINED');
-  
+
   // Check if we have database credentials
   if (!process.env.MYSQL_URL && (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_NAME)) {
     console.log('⚠️  WARNING: Database environment variables are missing!');
-    console.log('   Please set MYSQL_URL in Railway Variables.');
+    console.log('   Please set MYSQL_URL or DB_HOST/USER/NAME in Railway Variables.');
   }
 });
 
@@ -113,7 +129,7 @@ const server = app.listen(PORT, () => {
 async function connectDatabase() {
   try {
     console.log('🔗 Attempting database connection...');
-    
+
     if (process.env.MYSQL_URL) {
       console.log('   Using MYSQL_URL connection');
       try {
@@ -127,18 +143,18 @@ async function connectDatabase() {
       console.log('   User:', process.env.DB_USER);
       console.log('   Database:', process.env.DB_NAME);
     }
-    
+
     await sequelize.authenticate();
     console.log('✅ Database connection established successfully.');
-    
+
     await sequelize.sync({ force: false, alter: true });
     console.log('✅ Database models synced successfully.');
-    
+
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
     console.log('🔄 App will continue running without database connection.');
     console.log('   Please check your Railway environment variables.');
-    
+
     // Additional error details
     if (error.code) {
       console.log('   Error code:', error.code);
