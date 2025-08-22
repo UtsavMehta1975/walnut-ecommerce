@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import ThemeToggle from "../components/ThemeToggle";
@@ -12,7 +13,16 @@ function Signup() {
     password: "",
   });
   const [error, setError] = useState("");
-  const { signup } = useAuth();
+  const { signup, login } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Show message if redirected from product page
+  useEffect(() => {
+    if (location.state?.message) {
+      toast.success(location.state.message);
+    }
+  }, [location.state]);
 
   const handleChange = (e) => {
     setFormData({
@@ -26,7 +36,29 @@ function Signup() {
     setError("");
 
     try {
+      // Sign up the user
       await signup(formData);
+      
+      // Auto-login after successful signup
+      try {
+        await login({
+          email: formData.email,
+          password: formData.password
+        });
+        
+        // Redirect to returnTo URL if available, otherwise to store
+        const returnTo = location.state?.returnTo || "/store";
+        navigate(returnTo, { replace: true });
+        toast.success("Welcome to Walnut! You're now logged in.");
+      } catch (loginErr) {
+        // If auto-login fails, redirect to login page
+        navigate("/login", { 
+          state: { 
+            message: "Account created successfully! Please login.",
+            returnTo: location.state?.returnTo
+          }
+        });
+      }
     } catch (err) {
       const message = err.response?.data?.error || "Signup failed";
       setError(message);

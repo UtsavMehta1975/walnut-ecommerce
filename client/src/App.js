@@ -21,6 +21,7 @@ import Projects from "./pages/Projects";
 import Categories from "./pages/Categories";
 import Terms from "./pages/Terms";
 import ProductList from "./pages/ProductList";
+import ProductDetail from "./pages/ProductDetail";
 
 function App() {
   const { user } = useAuth();
@@ -37,6 +38,14 @@ function App() {
           {/* Public routes - accessible to everyone */}
           <Route path="/" element={<ProductList isPublic={true} />} />
           <Route path="/products" element={<ProductList isPublic={true} />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          
+          {/* Public pages - accessible to everyone */}
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/terms" element={<Terms />} />
           
           {/* Access Denied route */}
           <Route path="/access-denied" element={<AccessDenied />} />
@@ -70,6 +79,25 @@ function App() {
             }
           />
 
+          <Route
+            path="/order-confirmation"
+            element={
+              <ProtectedRoute>
+                <OrderConfirmation />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/my-orders"
+            element={
+              <ProtectedRoute>
+                <MyOrders />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Admin routes - require admin role */}
           <Route
             path="/admin"
             element={
@@ -105,31 +133,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-          <Route
-            path="/order-confirmation"
-            element={
-              <ProtectedRoute>
-                <OrderConfirmation />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/my-orders"
-            element={
-              <ProtectedRoute>
-                <MyOrders />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Public pages - accessible to everyone */}
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/terms" element={<Terms />} />
         </Routes>
       </CartProvider>
     </ThemeProvider>

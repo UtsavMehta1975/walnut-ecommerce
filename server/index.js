@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const sequelize = require('./config/database');
 
 // Create Express app
@@ -32,6 +33,9 @@ app.use(cors({
 
 // Parse JSON
 app.use(express.json());
+
+// Serve static files from uploads folder
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Healthcheck route - responds immediately
 app.get('/', (req, res) => {

@@ -93,8 +93,10 @@
     rgba(160, 231, 229, 0.9)
   );
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   opacity: 0;
   transition: var(--transition-smooth);
   backdrop-filter: blur(4px);
@@ -104,26 +106,30 @@
   opacity: 1;
 }
 
+.view-details-btn,
 .add-to-cart-btn {
   background: var(--charcoal-deep);
   color: var(--eggshell-white);
   border: none;
-  padding: 16px 32px;
+  padding: 12px 24px;
   border-radius: 50px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: var(--transition-smooth);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   backdrop-filter: blur(12px);
   box-shadow: var(--shadow-medium);
   letter-spacing: 0.02em;
   position: relative;
   overflow: hidden;
+  min-width: 140px;
+  justify-content: center;
 }
 
+.view-details-btn::before,
 .add-to-cart-btn::before {
   content: '';
   position: absolute;
@@ -136,10 +142,12 @@
   z-index: -1;
 }
 
+.view-details-btn:hover::before,
 .add-to-cart-btn:hover::before {
   left: 0;
 }
 
+.view-details-btn:hover,
 .add-to-cart-btn:hover {
   background: transparent;
   color: var(--charcoal-deep);
@@ -148,13 +156,47 @@
 }
 
 .btn-icon {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   transition: var(--transition-gentle);
 }
 
+.view-details-btn:hover .btn-icon,
 .add-to-cart-btn:hover .btn-icon {
   transform: rotate(12deg);
+}
+
+/* Buy Now Button */
+.buy-now-btn {
+  background: #3b82f6; /* Blue color as requested */
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  letter-spacing: 0.02em;
+  margin-top: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+.buy-now-btn:hover:not(:disabled) {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+.buy-now-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
 }
 
 .product-info {
@@ -296,8 +338,14 @@
     font-size: 1.2rem;
   }
   
+  .view-details-btn,
   .add-to-cart-btn {
-    padding: 14px 28px;
+    padding: 12px 20px;
+    font-size: 0.8rem;
+  }
+  
+  .buy-now-btn {
+    padding: 10px 20px;
     font-size: 0.85rem;
   }
 }
@@ -322,5 +370,21 @@
   .product-stock {
     font-size: 0.7rem;
     padding: 4px 10px;
+  }
+  
+  .product-overlay {
+    gap: 8px;
+  }
+  
+  .view-details-btn,
+  .add-to-cart-btn {
+    padding: 10px 16px;
+    font-size: 0.75rem;
+    min-width: 120px;
+  }
+  
+  .buy-now-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
   }
 }

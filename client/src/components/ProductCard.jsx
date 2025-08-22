@@ -21,6 +21,25 @@ function ProductCard({ product, onAddToCart, viewMode = "grid", isPublic = false
     }
   };
 
+  const handleBuyNow = () => {
+    if (isPublic && !user) {
+      // Redirect to signup for public users
+      navigate("/signup", { 
+        state: { 
+          message: "Please sign up to purchase this item",
+          returnTo: `/product/${product.id}`
+        }
+      });
+    } else {
+      // For authenticated users, go to product detail
+      navigate(`/product/${product.id}`);
+    }
+  };
+
+  const handleViewDetails = () => {
+    navigate(`/product/${product.id}`);
+  };
+
   return (
     <div className={`product-card ${viewMode}`}>
       <div className="product-image-container">
@@ -30,6 +49,14 @@ function ProductCard({ product, onAddToCart, viewMode = "grid", isPublic = false
           className="product-image"
         />
         <div className="product-overlay">
+          <button 
+            onClick={handleViewDetails}
+            className="view-details-btn"
+          >
+            <span className="btn-text">View Details</span>
+            <span className="btn-icon">👁️</span>
+          </button>
+          
           <button 
             onClick={handleAddToCart}
             className="add-to-cart-btn"
@@ -50,6 +77,17 @@ function ProductCard({ product, onAddToCart, viewMode = "grid", isPublic = false
           <span className="product-price">₹{product.price.toLocaleString()}</span>
           <span className="product-stock">{product.inStock ? 'In Stock' : 'Out of Stock'}</span>
         </div>
+        
+        {/* Buy Now button for public users */}
+        {isPublic && (
+          <button 
+            onClick={handleBuyNow}
+            className="buy-now-btn"
+            disabled={!product.inStock}
+          >
+            💳 Buy Now
+          </button>
+        )}
       </div>
     </div>
   );
