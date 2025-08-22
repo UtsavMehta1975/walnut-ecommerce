@@ -1,34 +1,32 @@
 import { useState } from "react";
-import axios from "../utils/axios";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import Layout from "../components/Layout";
+import { useAuth } from "../context/AuthContext";
+import ThemeToggle from "../components/ThemeToggle";
 import "../styles/auth.css";
 
 function Signup() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role] = useState("user");
+  const [formData, setFormData] = useState({
+    username: "",
+    name: "",
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const { signup } = useAuth();
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const response = await axios.post("/auth/signup", {
-        name,
-        email,
-        password,
-        role,
-      });
-
-      const { token } = response.data;
-      localStorage.setItem("jwt", token);
-      toast.success("Signup successful");
-      navigate("/store");
+      await signup(formData);
     } catch (err) {
       const message = err.response?.data?.error || "Signup failed";
       setError(message);
@@ -37,68 +35,83 @@ function Signup() {
   };
 
   return (
-    <Layout showHeader={false} showFooter={false} showNav={false}>
-      <div className="auth-container">
-        <div className="auth-card">
-          <div className="auth-header">
-            <h1 className="auth-title">⏰ Walnut</h1>
-            <p className="auth-subtitle">Join the world of premium timepieces</p>
-          </div>
-          
-          <form onSubmit={handleSignup} className="auth-form">
-            <h2 className="form-title">Create Account</h2>
-
-            {error && <p className="error-message">{error}</p>}
-
-            <div className="form-group">
-              <input
-                type="text"
-                placeholder="Full Name"
-                className="form-input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <input
-                type="email"
-                placeholder="Email Address"
-                className="form-input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <input
-                type="password"
-                placeholder="Password"
-                className="form-input"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-
-
-
-            <button type="submit" className="auth-button">
-              Create Account
-            </button>
-
-            <p className="auth-link">
-              Already have an account?{" "}
-              <a href="/login" className="link-text">
-                Login
-              </a>
-            </p>
-          </form>
-        </div>
+    <div className="auth-container">
+      <div className="theme-toggle-container">
+        <ThemeToggle />
       </div>
-    </Layout>
+      
+      <div className="auth-card">
+        <div className="auth-header">
+          <h1 className="auth-title">⏰ Walnut</h1>
+          <p className="auth-subtitle">Join the premium timepiece community</p>
+        </div>
+        
+        <form onSubmit={handleSignup} className="auth-form">
+          <h2 className="form-title">Sign Up</h2>
+
+          {error && <p className="error-message">{error}</p>}
+
+          <div className="form-group">
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              className="form-input"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              className="form-input"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              className="form-input"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className="form-input"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <button type="submit" className="auth-button">
+            Sign Up
+          </button>
+
+          <p className="auth-link">
+            Already have an account?{" "}
+            <a href="/login" className="link-text">
+              Login
+            </a>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 }
 
