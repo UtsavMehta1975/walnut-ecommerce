@@ -20,12 +20,13 @@ import Contact from "./pages/Contact";
 import Projects from "./pages/Projects";
 import Categories from "./pages/Categories";
 import Terms from "./pages/Terms";
+import ProductList from "./pages/ProductList";
 
 function App() {
   const { user } = useAuth();
 
   const getRedirectPath = () => {
-    if (!user) return "/login";
+    if (!user) return "/";
     return user.role === "admin" ? "/admin" : "/store";
   };
 
@@ -33,9 +34,10 @@ function App() {
     <ThemeProvider>
       <CartProvider>
         <Routes>
-          {/* Redirect root based on role */}
-          <Route path="/" element={<Navigate to={getRedirectPath()} replace />} />
-
+          {/* Public routes - accessible to everyone */}
+          <Route path="/" element={<ProductList isPublic={true} />} />
+          <Route path="/products" element={<ProductList isPublic={true} />} />
+          
           {/* Access Denied route */}
           <Route path="/access-denied" element={<AccessDenied />} />
 
@@ -49,7 +51,7 @@ function App() {
             element={user ? <Navigate to={getRedirectPath()} replace /> : <Signup />}
           />
 
-          {/* Protected routes */}
+          {/* Protected routes - require authentication */}
           <Route
             path="/store"
             element={
@@ -122,51 +124,12 @@ function App() {
             }
           />
 
-          {/* New pages */}
-          <Route
-            path="/about"
-            element={
-              <ProtectedRoute>
-                <About />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/contact"
-            element={
-              <ProtectedRoute>
-                <Contact />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/projects"
-            element={
-              <ProtectedRoute>
-                <Projects />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/categories"
-            element={
-              <ProtectedRoute>
-                <Categories />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/terms"
-            element={
-              <ProtectedRoute>
-                <Terms />
-              </ProtectedRoute>
-            }
-          />
+          {/* Public pages - accessible to everyone */}
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/terms" element={<Terms />} />
         </Routes>
       </CartProvider>
     </ThemeProvider>

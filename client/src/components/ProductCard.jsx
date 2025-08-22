@@ -1,6 +1,26 @@
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "../styles/productCard.css";
 
-function ProductCard({ product, onAddToCart, viewMode = "grid" }) {
+function ProductCard({ product, onAddToCart, viewMode = "grid", isPublic = false }) {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleAddToCart = () => {
+    if (isPublic && !user) {
+      // Redirect to login for public users
+      navigate("/login", { 
+        state: { 
+          message: "Please login to add items to your cart",
+          returnTo: `/product/${product.id}`
+        }
+      });
+    } else if (onAddToCart) {
+      // Normal add to cart for authenticated users
+      onAddToCart(product);
+    }
+  };
+
   return (
     <div className={`product-card ${viewMode}`}>
       <div className="product-image-container">
@@ -11,11 +31,15 @@ function ProductCard({ product, onAddToCart, viewMode = "grid" }) {
         />
         <div className="product-overlay">
           <button 
-            onClick={() => onAddToCart(product)}
+            onClick={handleAddToCart}
             className="add-to-cart-btn"
           >
-            <span className="btn-text">Add to Cart</span>
-            <span className="btn-icon">+</span>
+            <span className="btn-text">
+              {isPublic && !user ? "Login to Add" : "Add to Cart"}
+            </span>
+            <span className="btn-icon">
+              {isPublic && !user ? "🔐" : "+"}
+            </span>
           </button>
         </div>
       </div>

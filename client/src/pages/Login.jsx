@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import ThemeToggle from "../components/ThemeToggle";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/auth.css";
 
 function Login() {
@@ -9,13 +10,30 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { login } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Check for return URL from public store
+  useEffect(() => {
+    if (location.state?.message) {
+      toast(location.state.message, {
+        icon: '💡',
+        duration: 4000,
+      });
+    }
+  }, [location.state]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      await login(identifier, password); // ✅ clean call
+      await login(identifier, password);
+      
+      // Redirect to return URL if available
+      if (location.state?.returnTo) {
+        navigate(location.state.returnTo);
+      }
     } catch (err) {
       const message = err.response?.data?.error || "Login failed";
       setError(message);
