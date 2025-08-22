@@ -8,6 +8,7 @@ import Dashboard from "./pages/Store";
 import Cart from "./pages/Cart";
 import Admin from "./pages/Admin";
 import AdminProducts from "./pages/AdminProducts";
+import AdminCategories from "./pages/AdminCategories";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import MyOrders from "./pages/MyOrders";
 import AccessDenied from "./pages/AccessDenied";
@@ -88,6 +89,15 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin"]}>
               <AdminOrders />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin-categories"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminCategories />
             </ProtectedRoute>
           }
         />
